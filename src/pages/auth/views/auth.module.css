@@ -1,0 +1,11 @@
+.container_form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  row-gap: 2rem;
+}
+
+button {
+  background-color: red;
+}
