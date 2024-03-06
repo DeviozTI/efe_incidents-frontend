@@ -11,9 +11,10 @@ import {
   Select,
   TextField,
   Typography,
+  styled,
 } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
-import { BsJournal } from "react-icons/bs";
+import { BsCloudUpload, BsJournal, BsX } from "react-icons/bs";
 import ModalCustom from "../components/ModalCustom";
 import theme from "../../../../theme";
 import styles from "../dashboard.module.css";
@@ -31,10 +32,23 @@ import styles from "../dashboard.module.css";
 //   registrationTime: string;
 // }
 
+const VisuallyHiddenInput = styled("input")({
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
+  height: 1,
+  overflow: "hidden",
+  position: "absolute",
+  bottom: 0,
+  left: 0,
+  whiteSpace: "nowrap",
+  width: 1,
+});
+
 const DashboardIncidentsRegister = () => {
   const [openModal, setOpenModal] = useState(false);
   const [openModalDelete, setOpenModalDelete] = useState(false);
   const [rows, setRows] = useState([] as any);
+  const [selectedFile, setSelectedFile] = useState<any>();
   const [formValues, setFormValues] = useState({
     id: "",
     title: "",
@@ -118,7 +132,7 @@ const DashboardIncidentsRegister = () => {
     {
       field: "actions",
       headerName: "Acciones",
-      width: 200,
+      width: 300,
       renderCell: (cellValues) => {
         const handleEdit = () => {
           setOpenModal(true);
@@ -139,6 +153,9 @@ const DashboardIncidentsRegister = () => {
               columnGap: "1rem",
             }}
           >
+            <Button variant="contained" color="info">
+              Seguimiento
+            </Button>
             <Button variant="contained" color="info" onClick={handleEdit}>
               Editar
             </Button>
@@ -154,6 +171,16 @@ const DashboardIncidentsRegister = () => {
   const handleChange = (event: any) => {
     const { name, value } = event.target;
     setFormValues({ ...formValues, [name]: value });
+  };
+
+  const handleFileChange = (event: any) => {
+    const file = event.target.files[0];
+    setSelectedFile(file);
+  };
+
+  const formatFileSize = (sizeInBytes: any) => {
+    const sizeInMB = sizeInBytes / (1024 * 1024);
+    return sizeInMB.toFixed(2) + " MB";
   };
 
   const handleSubmit = (event: any) => {
@@ -207,7 +234,7 @@ const DashboardIncidentsRegister = () => {
 
   return (
     <LayoutDashboard>
-      <h1>Registro de incidencias</h1>
+      <h1>Resumen de incidencias</h1>
       <Box
         sx={{
           display: "flex",
@@ -299,12 +326,14 @@ const DashboardIncidentsRegister = () => {
                   marginBottom: "1rem",
                 }}
               >
-                <MenuItem value={"Pendiente"}>Pendiente</MenuItem>
+                <MenuItem value={"Abierto"}>Abierto</MenuItem>
+                <MenuItem value={"En revision"}>En revision</MenuItem>
                 <MenuItem value={"En proceso"}>En proceso</MenuItem>
-                <MenuItem value={"Resuelto"}>Resuelto</MenuItem>
+                <MenuItem value={"Completado"}>Completado</MenuItem>
               </Select>
             </FormControl>
-            <FormControl fullWidth>
+
+            {/* <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">
                 Archivos adjuntos
               </InputLabel>
@@ -322,7 +351,8 @@ const DashboardIncidentsRegister = () => {
                 <MenuItem value={"true"}>Sí</MenuItem>
                 <MenuItem value={"false"}>No</MenuItem>
               </Select>
-            </FormControl>
+            </FormControl> */}
+
             <Box mb={2}>
               <TextField
                 label="Detalle del incidente"
@@ -335,6 +365,64 @@ const DashboardIncidentsRegister = () => {
                 onChange={handleChange}
               />
             </Box>
+
+            <Box>
+              {!selectedFile && (
+                <Button
+                  fullWidth
+                  component="label"
+                  variant="contained"
+                  color="info"
+                  tabIndex={-1}
+                  startIcon={<BsCloudUpload />}
+                  sx={{
+                    marginBottom: "0.5rem",
+                  }}
+                >
+                  Upload file
+                  <VisuallyHiddenInput
+                    type="file"
+                    onChange={handleFileChange}
+                  />
+                </Button>
+              )}
+
+              {selectedFile && (
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    marginTop: "0.5rem",
+                    border: "1px solid #bfbfbf",
+                    padding: "0.5rem"
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      rowGap: "0.5rem",
+                    }}
+                  >
+                    <p style={{ marginRight: "1rem" }}>
+                      Archivo: {selectedFile.name}
+                    </p>
+                    <p style={{ marginRight: "1rem" }}>
+                      Tamaño: {formatFileSize(selectedFile.size)}
+                    </p>
+                  </Box>
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    onClick={() => setSelectedFile(null)}
+                    startIcon={<BsX />}
+                  >
+                    Remove
+                  </Button>
+                </Box>
+              )}
+            </Box>
+
             <Button type="submit" variant="contained" color="primary">
               Agregar
             </Button>

@@ -45,7 +45,7 @@ export const RoutesAdminPaths: IRoute[] = [
   {
     path: RouterAdminEnum.INCIDENTS,
     role: ["manager", "agent"],
-    label: "Resumen de incidencias",
+    label: "Graficos",
     showInSidebar: true,
     icon: BsBarChart,
     component: DashboardIncidents,
@@ -53,7 +53,7 @@ export const RoutesAdminPaths: IRoute[] = [
   {
     path: RouterAdminEnum.REGISTER_INCIDENTS,
     role: ["manager"],
-    label: "Formulario de registro de Incidencias",
+    label: "Resumen de incidencias",
     icon: BsJournalArrowUp,
     component: DashboardIncidentsRegister,
     showInSidebar: true,

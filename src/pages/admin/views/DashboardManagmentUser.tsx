@@ -11,7 +11,9 @@ import theme from "../../../../theme";
 const DashboardManagmentUser = () => {
   const [openModal, setOpenModal] = useState(false);
   const [openModalDelete, setOpenModalDelete] = useState(false);
-  const [rows, setRows] = useState([{ id: "", name: "", email: "" }]);
+  const [rows, setRows] = useState([
+    { id: "", name: "", user: "", role: "", tipology: "" },
+  ]);
 
   const columns: GridColDef[] = [
     {
@@ -25,9 +27,19 @@ const DashboardManagmentUser = () => {
       width: 200,
     },
     {
-      field: "email",
-      headerName: "Correo",
-      width: 300,
+      field: "user",
+      headerName: "Usuario",
+      width: 250,
+    },
+    {
+      field: "role",
+      headerName: "Rol",
+      width: 200,
+    },
+    {
+      field: "tipology",
+      headerName: "Tipologia",
+      width: 100,
     },
     {
       field: "actions",
@@ -70,52 +82,72 @@ const DashboardManagmentUser = () => {
       {
         id: "1",
         name: "John Doe",
-        email: "johndoe@example.com",
+        user: "johndoe@example.com",
+        role: "Admin",
+        tipology: "A",
       },
       {
         id: "2",
         name: "Jane Smith",
-        email: "janesmith@example.com",
+        user: "janesmith@example.com",
+        role: "User",
+        tipology: "B",
       },
       {
         id: "3",
         name: "Robert Johnson",
-        email: "robertjohnson@example.com",
+        user: "robertjohnson@example.com",
+        role: "Editor",
+        tipology: "C",
       },
       {
         id: "4",
         name: "Emily Davis",
-        email: "emilydavis@example.com",
+        user: "emilydavis@example.com",
+        role: "User",
+        tipology: "B",
       },
       {
         id: "5",
         name: "Michael Wilson",
-        email: "michaelwilson@example.com",
+        user: "michaelwilson@example.com",
+        role: "Admin",
+        tipology: "A",
       },
       {
         id: "6",
         name: "Jennifer Brown",
-        email: "jenniferbrown@example.com",
+        user: "jenniferbrown@example.com",
+        role: "Editor",
+        tipology: "C",
       },
       {
         id: "7",
         name: "William Taylor",
-        email: "williamtaylor@example.com",
+        user: "williamtaylor@example.com",
+        role: "User",
+        tipology: "B",
       },
       {
         id: "8",
         name: "Jessica Anderson",
-        email: "jessicaanderson@example.com",
+        user: "jessicaanderson@example.com",
+        role: "User",
+        tipology: "B",
       },
       {
         id: "9",
         name: "David Martinez",
-        email: "davidmartinez@example.com",
+        user: "davidmartinez@example.com",
+        role: "Admin",
+        tipology: "A",
       },
       {
         id: "10",
         name: "Sarah Thomas",
-        email: "sarahthomas@example.com",
+        user: "sarahthomas@example.com",
+        role: "Editor",
+        tipology: "C",
       },
     ]);
   }, []);

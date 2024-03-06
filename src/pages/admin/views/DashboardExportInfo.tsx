@@ -26,7 +26,10 @@ const DashboardExportInfo = () => {
         }}
       >
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker label="Fecha" />
+          <DatePicker label="Fecha Inicio" />
+        </LocalizationProvider>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker label="Fecha Fin" />
         </LocalizationProvider>
         <TextField label="Usuario" variant="outlined" />
         <TextField label="Tipologia" variant="outlined" />
