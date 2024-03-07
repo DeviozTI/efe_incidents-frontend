@@ -12,7 +12,7 @@ const PrivateRoutes = () => {
         />
       ))}
 
-      <Route path="*" element={<Navigate to={RouterAdminEnum.HOME} />} />
+      <Route path="*" element={<Navigate to={RouterAdminEnum.INCIDENTS} />} />
     </Routes>
   );
 };

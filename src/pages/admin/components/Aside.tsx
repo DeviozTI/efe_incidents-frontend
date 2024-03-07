@@ -103,6 +103,7 @@ const Aside = () => {
           <div style={{ flex: 1 }}>
             <Menu className={styles.sidebar_menu} closeOnClick={false}>
               {RoutesAdminPaths.map((route) => {
+                if (route && route.showInSidebar === false) return null;
                 if (route.subRoutes) {
                   return (
                     <SubMenu

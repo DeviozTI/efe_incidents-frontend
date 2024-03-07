@@ -22,6 +22,8 @@ const LayoutDashboard = ({ children }: ILayoutDashboard) => {
           paddingRight: "2rem",
           paddingTop: "1rem",
           backgroundColor: "#f9f9f9",
+          overflow: "auto",
+          paddingBottom: "1rem",
           [theme.breakpoints.down("md")]: {
             paddingLeft: "2rem",
             paddingTop: "4rem",

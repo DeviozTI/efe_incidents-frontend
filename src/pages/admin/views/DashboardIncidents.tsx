@@ -110,7 +110,7 @@ const DashboardIncidents = () => {
 
   return (
     <LayoutDashboard>
-      <h1>Resumen de incidencias</h1>
+      <h1>Graficos</h1>
 
       <Box
         sx={{

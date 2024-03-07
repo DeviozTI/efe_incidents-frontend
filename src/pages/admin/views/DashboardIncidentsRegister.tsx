@@ -14,10 +14,12 @@ import {
   styled,
 } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
-import { BsCloudUpload, BsJournal, BsX } from "react-icons/bs";
+import { BsCloudUpload, BsPlusCircle, BsX } from "react-icons/bs";
 import ModalCustom from "../components/ModalCustom";
 import theme from "../../../../theme";
 import styles from "../dashboard.module.css";
+import { useTrackingLine } from "../../../hooks/useTrackingLine";
+import { useNavigate } from "react-router-dom";
 
 // interface RowsProps {
 //   id: string;
@@ -45,8 +47,13 @@ const VisuallyHiddenInput = styled("input")({
 });
 
 const DashboardIncidentsRegister = () => {
+  const navigate = useNavigate();
+  const { setTrackingLineSelected } = useTrackingLine();
+
   const [openModal, setOpenModal] = useState(false);
   const [openModalDelete, setOpenModalDelete] = useState(false);
+  const [openModalEdit, setOpenModalEdit] = useState(false);
+  const [dataSelected, setDataSelected] = useState({} as any);
   const [rows, setRows] = useState([] as any);
   const [selectedFile, setSelectedFile] = useState<any>();
   const [formValues, setFormValues] = useState({
@@ -103,13 +110,16 @@ const DashboardIncidentsRegister = () => {
       renderCell: (cellValues) => {
         let color;
         switch (cellValues.value) {
-          case "Pendiente":
-            color = "warning";
-            break;
-          case "En proceso":
+          case "Abierto":
             color = "info";
             break;
-          case "Resuelto":
+          case "En proceso":
+            color = "warning";
+            break;
+          case "En revision":
+            color = "warning";
+            break;
+          case "Completado":
             color = "success";
             break;
           default:
@@ -135,13 +145,17 @@ const DashboardIncidentsRegister = () => {
       width: 300,
       renderCell: (cellValues) => {
         const handleEdit = () => {
-          setOpenModal(true);
-          console.log("Editar", cellValues.id);
+          setOpenModalEdit(true);
+          setDataSelected(cellValues.row);
         };
 
         const handleDelete = () => {
           setOpenModalDelete(true);
-          console.log("Eliminar", cellValues.id);
+        };
+
+        const handleTrackingLine = () => {
+          setTrackingLineSelected(cellValues.row);
+          navigate(`/admin/dashboard/tracking-line/${cellValues.row.id}`);
         };
 
         return (
@@ -153,7 +167,11 @@ const DashboardIncidentsRegister = () => {
               columnGap: "1rem",
             }}
           >
-            <Button variant="contained" color="info">
+            <Button
+              variant="contained"
+              color="info"
+              onClick={handleTrackingLine}
+            >
               Seguimiento
             </Button>
             <Button variant="contained" color="info" onClick={handleEdit}>
@@ -199,7 +217,7 @@ const DashboardIncidentsRegister = () => {
         reportingUser: "John Doe",
         assignedUser: "Jane Smith",
         attachments: true,
-        status: "Pendiente",
+        status: "Abierto",
         registrationDate: "2023-10-01",
         registrationTime: "08:00",
       },
@@ -225,7 +243,7 @@ const DashboardIncidentsRegister = () => {
         reportingUser: "David Martinez",
         assignedUser: "Jennifer Brown",
         attachments: true,
-        status: "Resuelto",
+        status: "Completado",
         registrationDate: "2023-10-03",
         registrationTime: "10:45",
       },
@@ -250,7 +268,7 @@ const DashboardIncidentsRegister = () => {
         <Button
           variant="contained"
           color="primary"
-          startIcon={<BsJournal />}
+          startIcon={<BsPlusCircle />}
           onClick={() => setOpenModal(true)}
           sx={{
             width: "fit-content",
@@ -292,7 +310,7 @@ const DashboardIncidentsRegister = () => {
                 onChange={handleChange}
               />
             </Box>
-            <Box mb={2}>
+            {/* <Box mb={2}>
               <TextField
                 label="Usuario que reporta"
                 variant="outlined"
@@ -301,7 +319,7 @@ const DashboardIncidentsRegister = () => {
                 value={formValues.reportingUser}
                 onChange={handleChange}
               />
-            </Box>
+            </Box> */}
             <Box mb={2}>
               <TextField
                 label="Usuario asignado"
@@ -313,7 +331,7 @@ const DashboardIncidentsRegister = () => {
               />
             </Box>
             {/* Status select */}
-            <FormControl fullWidth>
+            {/* <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">Estado</InputLabel>
               <Select
                 labelId="status"
@@ -331,7 +349,7 @@ const DashboardIncidentsRegister = () => {
                 <MenuItem value={"En proceso"}>En proceso</MenuItem>
                 <MenuItem value={"Completado"}>Completado</MenuItem>
               </Select>
-            </FormControl>
+            </FormControl> */}
 
             {/* <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">
@@ -379,7 +397,7 @@ const DashboardIncidentsRegister = () => {
                     marginBottom: "0.5rem",
                   }}
                 >
-                  Upload file
+                  Subir archivo
                   <VisuallyHiddenInput
                     type="file"
                     onChange={handleFileChange}
@@ -394,7 +412,7 @@ const DashboardIncidentsRegister = () => {
                     alignItems: "center",
                     marginTop: "0.5rem",
                     border: "1px solid #bfbfbf",
-                    padding: "0.5rem"
+                    padding: "0.5rem",
                   }}
                 >
                   <Box
@@ -428,6 +446,170 @@ const DashboardIncidentsRegister = () => {
             </Button>
           </form>
         </>
+      </ModalCustom>
+
+      <ModalCustom setOpenModal={setOpenModalEdit} stateModal={openModalEdit}>
+        <Typography
+          variant="h4"
+          id="modal-modal-title"
+          component="h2"
+          align="center"
+        >
+          Editar incidencia
+        </Typography>
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <Box mb={2}>
+            <TextField
+              label="Título"
+              variant="outlined"
+              fullWidth
+              name="title"
+              defaultValue={dataSelected.title}
+              onChange={handleChange}
+            />
+          </Box>
+          <Box mb={2}>
+            <TextField
+              label="Tipología"
+              variant="outlined"
+              fullWidth
+              name="typology"
+              defaultValue={dataSelected.typology}
+              onChange={handleChange}
+            />
+          </Box>
+          <Box mb={2}>
+            <TextField
+              label="Usuario que reporta"
+              disabled
+              variant="outlined"
+              fullWidth
+              name="reportingUser"
+              defaultValue={dataSelected.reportingUser}
+              onChange={handleChange}
+            />
+          </Box>
+          <Box mb={2}>
+            <TextField
+              label="Usuario asignado"
+              variant="outlined"
+              fullWidth
+              name="assignedUser"
+              defaultValue={dataSelected.assignedUser}
+              onChange={handleChange}
+            />
+          </Box>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Estado</InputLabel>
+            <Select
+              labelId="status"
+              name="status"
+              id="status"
+              defaultValue={dataSelected.status}
+              label="Estado"
+              onChange={handleChange}
+              sx={{
+                marginBottom: "1rem",
+              }}
+            >
+              <MenuItem value={"Abierto"}>Abierto</MenuItem>
+              <MenuItem value={"En revision"}>En revision</MenuItem>
+              <MenuItem value={"En proceso"}>En proceso</MenuItem>
+              <MenuItem value={"Completado"}>Completado</MenuItem>
+            </Select>
+          </FormControl>
+
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">
+              Archivos adjuntos
+            </InputLabel>
+            <Select
+              labelId="attachments"
+              name="attachments"
+              id="attachments"
+              value={formValues.attachments}
+              label="Archivos adjuntos"
+              onChange={handleChange}
+              sx={{
+                marginBottom: "1rem",
+              }}
+            >
+              <MenuItem value={"true"}>Sí</MenuItem>
+              <MenuItem value={"false"}>No</MenuItem>
+            </Select>
+          </FormControl>
+
+          <Box mb={2}>
+            <TextField
+              label="Detalle del incidente"
+              variant="outlined"
+              fullWidth
+              multiline
+              rows={4}
+              name="incidentDetail"
+              value={dataSelected.incidentDetail}
+              onChange={handleChange}
+            />
+          </Box>
+
+          <Box>
+            {!selectedFile && (
+              <Button
+                fullWidth
+                component="label"
+                variant="contained"
+                color="info"
+                tabIndex={-1}
+                startIcon={<BsCloudUpload />}
+                sx={{
+                  marginBottom: "0.5rem",
+                }}
+              >
+                Subir archivo
+                <VisuallyHiddenInput type="file" onChange={handleFileChange} />
+              </Button>
+            )}
+
+            {selectedFile && (
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginTop: "0.5rem",
+                  border: "1px solid #bfbfbf",
+                  padding: "0.5rem",
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    rowGap: "0.5rem",
+                  }}
+                >
+                  <p style={{ marginRight: "1rem" }}>
+                    Archivo: {selectedFile.name}
+                  </p>
+                  <p style={{ marginRight: "1rem" }}>
+                    Tamaño: {formatFileSize(selectedFile.size)}
+                  </p>
+                </Box>
+                <Button
+                  variant="outlined"
+                  color="error"
+                  onClick={() => setSelectedFile(null)}
+                  startIcon={<BsX />}
+                >
+                  Remove
+                </Button>
+              </Box>
+            )}
+          </Box>
+
+          <Button type="submit" variant="contained" color="primary">
+            Editar
+          </Button>
+        </form>
       </ModalCustom>
 
       <ModalCustom

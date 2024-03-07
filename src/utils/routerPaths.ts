@@ -1,24 +1,23 @@
 import {
   BsBarChart,
-  BsBell,
-  // BsHouse,
   BsJournalArrowDown,
   BsJournalArrowUp,
   BsNodePlus,
   BsPersonGear,
 } from "react-icons/bs";
-import DashboardHome from "../pages/admin/views/DashboardHome";
 import DashboardIncidents from "../pages/admin/views/DashboardIncidents";
 import DashboardIncidentsRegister from "../pages/admin/views/DashboardIncidentsRegister";
-import DashboardTrackingLine from "../pages/admin/views/DashboardTrackingLine";
+import DashboardTrackingLine from "../pages/admin/views/TrackingLine/DashboardTrackingLineList";
 import DashboardExportInfo from "../pages/admin/views/DashboardExportInfo";
 import DashboardManagmentUser from "../pages/admin/views/DashboardManagmentUser";
+import DashboardTrackingLineElement from "../pages/admin/views/TrackingLine/DashboardTrackingLineElement";
 
 export const RouterAdminEnum = {
   HOME: "home",
   INCIDENTS: "incidents",
   REGISTER_INCIDENTS: "register-incidents",
   TRACKING_LINE: "tracking-line",
+  TRACKING_LINE_ELEMENT: "tracking-line/:id",
   EXPORT_INFO: "export-info",
   MANAGMENT_USER: "managment-user",
 };
@@ -34,14 +33,6 @@ interface IRoute {
 }
 
 export const RoutesAdminPaths: IRoute[] = [
-  // {
-  //   path: RouterAdminEnum.HOME,
-  //   role: ["manager"],
-  //   label: "Home",
-  //   showInSidebar: true,
-  //   icon: BsHouse,
-  //   component: DashboardHome,
-  // },
   {
     path: RouterAdminEnum.INCIDENTS,
     role: ["manager", "agent"],
@@ -67,6 +58,14 @@ export const RoutesAdminPaths: IRoute[] = [
     showInSidebar: true,
   },
   {
+    path: RouterAdminEnum.TRACKING_LINE_ELEMENT,
+    role: ["manager"],
+    label: "Hilo de seguimiento 2",
+    icon: BsNodePlus,
+    component: DashboardTrackingLineElement,
+    showInSidebar: false,
+  },
+  {
     path: RouterAdminEnum.EXPORT_INFO,
     role: ["manager"],
     label: "Exportar información",
@@ -82,19 +81,19 @@ export const RoutesAdminPaths: IRoute[] = [
     component: DashboardManagmentUser,
     showInSidebar: true,
   },
-  {
-    path: RouterAdminEnum.HOME,
-    role: ["manager"],
-    label: "Gestionar notificaciones",
-    icon: BsBell,
-    component: DashboardHome,
-    showInSidebar: true,
-    subRoutes: [
-      { path: "/admin/dashboard/notifications", label: "Ver notificaciones" },
-      {
-        path: "/admin/dashboard/notifications/settings",
-        label: "Configuración",
-      },
-    ],
-  },
+  // {
+  //   path: RouterAdminEnum.HOME,
+  //   role: ["manager"],
+  //   label: "Gestionar notificaciones",
+  //   icon: BsBell,
+  //   component: DashboardHome,
+  //   showInSidebar: true,
+  //   subRoutes: [
+  //     { path: "/admin/dashboard/notifications", label: "Ver notificaciones" },
+  //     {
+  //       path: "/admin/dashboard/notifications/settings",
+  //       label: "Configuración",
+  //     },
+  //   ],
+  // },
 ];

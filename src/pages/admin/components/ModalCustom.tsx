@@ -11,6 +11,9 @@ const style = {
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
+  height: "fit-content",
+  maxHeight: "90%",
+  overflow: "auto",
   p: 4,
 };
 
