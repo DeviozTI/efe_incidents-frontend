@@ -92,7 +92,7 @@ const DashboardTrackingLineList = () => {
                     label={tracking.status}
                     color={
                       tracking.status === "Abierto"
-                        ? "error"
+                        ? "info"
                         : tracking.status === "En proceso"
                         ? "warning"
                         : "success"
