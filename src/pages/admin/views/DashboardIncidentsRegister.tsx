@@ -64,6 +64,8 @@ const DashboardIncidentsRegister = () => {
     reportingUser: "",
     assignedUser: "",
     attachments: false,
+    type: "",
+    moment: "",
     status: "",
     registrationDate: "",
     registrationTime: "",
@@ -104,6 +106,16 @@ const DashboardIncidentsRegister = () => {
       },
     },
     {
+      field: "type",
+      headerName: "Tipo",
+      width: 200,
+    },
+    {
+      field: "moment",
+      headerName: "Momento",
+      width: 200,
+    },
+    {
       field: "status",
       headerName: "Estado",
       width: 150,
@@ -116,8 +128,11 @@ const DashboardIncidentsRegister = () => {
           case "En proceso":
             color = "warning";
             break;
-          case "En revision":
-            color = "warning";
+          case "Sin asignar":
+            color = "default";
+            break;
+          case "Desestimado":
+            color = "error";
             break;
           case "Completado":
             color = "success";
@@ -147,6 +162,7 @@ const DashboardIncidentsRegister = () => {
         const handleEdit = () => {
           setOpenModalEdit(true);
           setDataSelected(cellValues.row);
+          console.log(cellValues.row);
         };
 
         const handleDelete = () => {
@@ -217,6 +233,8 @@ const DashboardIncidentsRegister = () => {
         reportingUser: "John Doe",
         assignedUser: "Jane Smith",
         attachments: true,
+        type: "Calidad de datos",
+        moment: "pre-produccion",
         status: "Abierto",
         registrationDate: "2023-10-01",
         registrationTime: "08:00",
@@ -230,6 +248,8 @@ const DashboardIncidentsRegister = () => {
         reportingUser: "Emily Davis",
         assignedUser: "Michael Wilson",
         attachments: false,
+        type: "Implementacion de modelos",
+        moment: "post-produccion",
         status: "En proceso",
         registrationDate: "2023-10-02",
         registrationTime: "09:30",
@@ -243,7 +263,39 @@ const DashboardIncidentsRegister = () => {
         reportingUser: "David Martinez",
         assignedUser: "Jennifer Brown",
         attachments: true,
+        type: "Implementacion de modelos",
+        moment: "post-produccion",
+        status: "Sin asignar",
+        registrationDate: "2023-10-03",
+        registrationTime: "10:45",
+      },
+      {
+        id: "4",
+        title: "Acceso denegado a recurso",
+        typology: "Error de permisos",
+        incidentDetail:
+          "El usuario no tiene acceso al recurso compartido solicitado.",
+        reportingUser: "David Martinez",
+        assignedUser: "Jennifer Brown",
+        attachments: true,
+        type: "Calidad de datos",
+        moment: "pre-produccion",
         status: "Completado",
+        registrationDate: "2023-10-03",
+        registrationTime: "10:45",
+      },
+      {
+        id: "5",
+        title: "Acceso denegado a recurso",
+        typology: "Error de permisos",
+        incidentDetail:
+          "El usuario no tiene acceso al recurso compartido solicitado.",
+        reportingUser: "David Martinez",
+        assignedUser: "Jennifer Brown",
+        attachments: true,
+        type: "Calidad de datos",
+        moment: "pre-produccion",
+        status: "Desestimado",
         registrationDate: "2023-10-03",
         registrationTime: "10:45",
       },
@@ -310,16 +362,6 @@ const DashboardIncidentsRegister = () => {
                 onChange={handleChange}
               />
             </Box>
-            {/* <Box mb={2}>
-              <TextField
-                label="Usuario que reporta"
-                variant="outlined"
-                fullWidth
-                name="reportingUser"
-                value={formValues.reportingUser}
-                onChange={handleChange}
-              />
-            </Box> */}
             <Box mb={2}>
               <TextField
                 label="Usuario asignado"
@@ -330,46 +372,43 @@ const DashboardIncidentsRegister = () => {
                 onChange={handleChange}
               />
             </Box>
-            {/* Status select */}
-            {/* <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Estado</InputLabel>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Tipo</InputLabel>
               <Select
-                labelId="status"
-                name="status"
-                id="status"
-                value={formValues.status}
-                label="Estado"
+                labelId="types"
+                name="types"
+                id="types"
+                value={formValues.type}
+                label="Tipo"
                 onChange={handleChange}
                 sx={{
                   marginBottom: "1rem",
                 }}
               >
-                <MenuItem value={"Abierto"}>Abierto</MenuItem>
-                <MenuItem value={"En revision"}>En revision</MenuItem>
-                <MenuItem value={"En proceso"}>En proceso</MenuItem>
-                <MenuItem value={"Completado"}>Completado</MenuItem>
+                <MenuItem value={"calidad de datos"}>Calidad de datos</MenuItem>
+                <MenuItem value={"implementacion de modelos"}>
+                  Implementacion de modelos
+                </MenuItem>
               </Select>
-            </FormControl> */}
+            </FormControl>
 
-            {/* <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">
-                Archivos adjuntos
-              </InputLabel>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Momento</InputLabel>
               <Select
-                labelId="attachments"
-                name="attachments"
-                id="attachments"
-                value={formValues.attachments}
-                label="Archivos adjuntos"
+                labelId="moment"
+                name="moment"
+                id="moment"
+                value={formValues.moment}
+                label="Momento"
                 onChange={handleChange}
                 sx={{
                   marginBottom: "1rem",
                 }}
               >
-                <MenuItem value={"true"}>Sí</MenuItem>
-                <MenuItem value={"false"}>No</MenuItem>
+                <MenuItem value={"pre-produccion"}>Pre-produccion</MenuItem>
+                <MenuItem value={"post-produccion"}>Post-produccion</MenuItem>
               </Select>
-            </FormControl> */}
+            </FormControl>
 
             <Box mb={2}>
               <TextField
@@ -513,12 +552,13 @@ const DashboardIncidentsRegister = () => {
               }}
             >
               <MenuItem value={"Abierto"}>Abierto</MenuItem>
-              <MenuItem value={"En revision"}>En revision</MenuItem>
+              <MenuItem value={"Sin asignar"}>Sin asignar</MenuItem>
               <MenuItem value={"En proceso"}>En proceso</MenuItem>
               <MenuItem value={"Completado"}>Completado</MenuItem>
+              <MenuItem value={"Desestimado"}>Desestimado</MenuItem>
             </Select>
           </FormControl>
-
+          {/* 
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">
               Archivos adjuntos
@@ -536,6 +576,44 @@ const DashboardIncidentsRegister = () => {
             >
               <MenuItem value={"true"}>Sí</MenuItem>
               <MenuItem value={"false"}>No</MenuItem>
+            </Select>
+          </FormControl> */}
+
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Tipo</InputLabel>
+            <Select
+              labelId="types"
+              name="types"
+              id="types"
+              defaultValue={dataSelected.type}
+              label="Tipo"
+              onChange={handleChange}
+              sx={{
+                marginBottom: "1rem",
+              }}
+            >
+              <MenuItem value={"Calidad de datos"}>Calidad de datos</MenuItem>
+              <MenuItem value={"Implementacion de modelos"}>
+                Implementacion de modelos
+              </MenuItem>
+            </Select>
+          </FormControl>
+
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Momento</InputLabel>
+            <Select
+              labelId="moment"
+              name="moment"
+              id="moment"
+              defaultValue={dataSelected.moment}
+              label="Momento"
+              onChange={handleChange}
+              sx={{
+                marginBottom: "1rem",
+              }}
+            >
+              <MenuItem value={"pre-produccion"}>Pre-produccion</MenuItem>
+              <MenuItem value={"post-produccion"}>Post-produccion</MenuItem>
             </Select>
           </FormControl>
 
