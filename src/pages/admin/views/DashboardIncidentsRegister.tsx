@@ -328,7 +328,7 @@ const DashboardIncidentsRegister = () => {
         >
           Agregar incidencia
         </Button>
-        <TableGrid columns={columns} rows={rows} />
+        <TableGrid columns={columns} rows={rows} autoHeight={false} />
       </Box>
 
       <ModalCustom setOpenModal={setOpenModal} stateModal={openModal}>

@@ -23,16 +23,17 @@ import theme from "../../../../theme";
 interface Props {
   columns: GridColDef[];
   rows: Array<any>;
+  autoHeight?: boolean;
 }
 
-export default function TableGrid({ columns, rows }: Props) {
+export default function TableGrid({ columns, rows, autoHeight = true }: Props) {
   return (
     <Box
       sx={{
         height: 400,
-        width: "90%",
+        width: "100%",
         [theme.breakpoints.down("xl")]: {
-          width: "84%",
+          width: "100%",
         },
         [theme.breakpoints.down("lg")]: {
           width: "100%",
@@ -43,9 +44,11 @@ export default function TableGrid({ columns, rows }: Props) {
         localeText={esES.components.MuiDataGrid.defaultProps.localeText}
         rows={rows}
         columns={columns}
-        autoHeight
         disableRowSelectionOnClick
+        autoHeight={autoHeight}
         sx={{
+          height: "80vh",
+          width: "100%",
           "& .MuiDataGrid-cell:focus, & .MuiDataGrid-cell:focus-within": {
             outline: "none",
           },
